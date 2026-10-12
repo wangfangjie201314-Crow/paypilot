@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PayPilot — AI Sales Agent for Mira Ceramics</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div class="brand"><span class="logo">◈</span> PayPilot <em>for Mira Ceramics</em></div>
+  <nav>
+    <button id="tab-chat" class="active">💬 Buyer Chat</button>
+    <a class="tablink" href="/merchant">📊 Merchant Dashboard →</a>
+  </nav>
+  <div class="badges">
+    {% if paypal_ok %}<span class="badge ok">PayPal sandbox ✓</span>
+    {% else %}<span class="badge warn">PayPal not configured</span>{% endif %}
+    <span class="badge">AI: {{ llm_mode }}</span>
+  </div>
+</header>
+
+<main>
+  <!-- BUYER CHAT -->
+  <section id="view-chat">
+    <div class="chat-wrap">
+      <div class="chat-head">
+        <div class="avatar">🏺</div>
+        <div><b>Mira Ceramics</b><br><span class="online">● PayPilot AI is online — replies instantly</span></div>
+      </div>
+      <div id="messages" class="messages"></div>
+      <div class="chips">
+        <button onclick="send('Hi! Do you have any blue mugs?')">🔵 Any blue mugs?</button>
+        <button onclick="send(&quot;I'll take 2 of the Ocean Blue mugs&quot;)">🛒 I'll take 2 Ocean Blue mugs</button>
+        <button onclick="send('What is the status of my order?')">📦 Order status?</button>
+      </div>
+      <div class="input-row">
+        <input id="input" placeholder="Ask about our ceramics…" autocomplete="off">
+        <button onclick="sendInput()">Send</button>
+      </div>
+    </div>
+    <p class="hint">Demo buyer: chat like a customer. When PayPilot creates a PayPal order, approve it in the sandbox link, then come back — the chat confirms automatically.</p>
+  </section>
+</main>
+<footer>PayPilot · PayPal AI Hackathon entry · sandbox only, no real money moves · merchants: <a href="/merchant">dashboard</a></footer>
+<script src="/static/app.js"></script>
+</body>
+</html>
