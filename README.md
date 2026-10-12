@@ -187,6 +187,13 @@ Live DeepSeek tool calls were exercised through the app and returned provider
 HTTP 200 with token usage. An independent catalog query matched the public
 product data. A separate shipping query returned $48.00 + $5.95 = $53.95 for
 two Ocean Blue mugs, without creating an order. A buyer-authorized purchase
-then created a real PayPal **sandbox** order for that amount. Buyer approval and
-capture remain pending verification. This is not a production payment or a
+then created a real PayPal **sandbox** order for that amount. Buyer approval,
+return/capture, remote capture amount/currency and the local merchant state
+were subsequently exercised: the sub-capture was COMPLETED for USD 53.95,
+the local order was CAPTURED and the merchant brief reported $53.95. No real
+money moved. This is not a production payment or a
 measured merchant-sales result. Mira Ceramics and its static catalog are demo data.
+
+Prototype UI notes: fulfillment/tracking is not implemented; shipping text is
+sample store policy. Recovery drafts are not sent automatically and may remain
+visible after payment; the merchant must recheck status before using one.
