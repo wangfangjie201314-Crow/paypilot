@@ -11,6 +11,8 @@ import time
 
 import requests
 
+SHIPPING_FEE_CENTS = 595
+FREE_SHIPPING_THRESHOLD_CENTS = 5000
 
 class PayPalError(Exception):
     pass
@@ -75,7 +77,7 @@ class PayPalClient:
         if not items:
             raise PayPalError("create_order requires at least one item")
         item_total = sum(i["unit_cents"] * i["quantity"] for i in items)
-        shipping = 0 if item_total >= 5000 else 595
+        shipping = 0 if item_total >= FREE_SHIPPING_THRESHOLD_CENTS else SHIPPING_FEE_CENTS
         total = item_total + shipping
 
         body = {

@@ -7,6 +7,7 @@
   LLM_API_KEY is empty or DEMO_MODE=true. Clearly a demo fallback.
 """
 import re
+from urllib.parse import urlparse
 
 import requests
 
@@ -37,6 +38,12 @@ class LLMClient:
 
     def chat(self, messages, tools=None, context=None):
         body = {"model": self.model, "messages": messages, "temperature": 0.3}
+        # DeepSeek defaults to thinking mode, whose tool history requires
+        # reasoning_content. This agent uses ordinary chat tool messages.
+        # Select its supported non-thinking mode and bound demo output cost.
+        if urlparse(self.base_url).hostname == "api.deepseek.com":
+            body["thinking"] = {"type": "disabled"}
+            body["max_tokens"] = 2048
         if tools:
             body["tools"] = tools
             body["tool_choice"] = "auto"

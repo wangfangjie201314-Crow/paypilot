@@ -53,6 +53,13 @@ payment** still requires free PayPal sandbox credentials — see step 1 above.
 Set `LLM_API_KEY` (+ optional `LLM_BASE_URL`/`LLM_MODEL`, any
 OpenAI-compatible API) for live LLM mode.
 
+For the verified DeepSeek integration, set `LLM_BASE_URL=https://api.deepseek.com`
+and `LLM_MODEL=deepseek-flash`, with your own `LLM_API_KEY` in `.env`.
+The client selects non-thinking mode for this official host, matching the
+agent's ordinary tool-message history, and limits each model output to 2048
+tokens. API usage is billable; do not expose your key or run an unattended
+public demo without your own usage controls.
+
 ## Merchant dashboard auth
 
 The merchant area lives at **`GET /merchant`** — a separate page from the
@@ -143,7 +150,7 @@ PayPal `PayPal-Request-Id` header. A repeated key returns the existing
 order instead of creating a duplicate; a missing key mints a fresh one
 per purchase intent. The HTTP operation key is authoritative. The server derives a per-call key from normalized items; model-supplied keys are ignored and are not part of the tool schema.
 
-Tests: `python -m unittest tests.test_all` (56 tests, no keys needed;
+Tests: `python -m unittest discover -s tests -p 'test_*.py'` (60 tests, no keys needed;
 includes the payment path×variant combination matrix, terminal-state
 protection, HTTP-level retry, session-boundary, a fresh-subprocess dotenv
 isolation test, and a Node DOM suite for the chat XSS fix — skipped if
@@ -155,7 +162,7 @@ node is absent).
   create/capture/get), OAuth2 client-credentials and order verification. The implementation targets the real sandbox APIs; the latest independent acceptance tests used offline recorded mocks.
 - **AI**: agent built with Muse AI assistance; runtime LLM is
   pluggable — any OpenAI-compatible model via `LLM_*` env vars
-  (real-model execution has not yet been independently verified); built-in `DemoLLM` fallback
+  (DeepSeek Flash catalog lookup and shipping-price replies were exercised live); built-in `DemoLLM` fallback
   for keyless evaluation.
 - **Demo video**: AI-generated intro/outro segments (Muse video pipeline),
   AI voiceover, screen recording of the live app.
@@ -167,3 +174,19 @@ MIT — see [LICENSE](LICENSE).
 ## Verification status (v5, 2026-10-12)
 
 56 Python tests and 5 Node DOM tests pass. Independent offline verification covered 84 caller checks, including 15 threaded SQLite schedules and stable PayPal request IDs when model tool arguments change. This confirms the tested offline code paths; live LLM execution, real sandbox approval/capture, and production deployment are not yet claimed as verified.
+
+## Publication increment: live model integration (2026-10-12)
+
+The original v5 remains the offline acceptance baseline. This increment adds
+DeepSeek non-thinking compatibility and shares the existing shipping constants
+between checkout construction and the model prompt. All 60 Python tests pass,
+including the $49.99/$50.00/$50.01 shipping boundary; independent read-only
+review found no actionable regression.
+
+Live DeepSeek tool calls were exercised through the app and returned provider
+HTTP 200 with token usage. An independent catalog query matched the public
+product data. A separate shipping query returned $48.00 + $5.95 = $53.95 for
+two Ocean Blue mugs, without creating an order. A buyer-authorized purchase
+then created a real PayPal **sandbox** order for that amount. Buyer approval and
+capture remain pending verification. This is not a production payment or a
+measured merchant-sales result. Mira Ceramics and its static catalog are demo data.
