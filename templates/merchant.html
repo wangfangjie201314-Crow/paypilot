@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PayPilot — Merchant Dashboard</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div class="brand"><span class="logo">◈</span> PayPilot <em>merchant</em></div>
+  <nav><a class="tablink" href="/">← Buyer chat</a></nav>
+</header>
+
+<main>
+  <!-- Token gate: the operator pastes MERCHANT_API_TOKEN (printed in the
+       server console at startup) here. It lives in a JS variable only —
+       never in HTML, localStorage or cookies. -->
+  <section id="gate" class="card">
+    <h3>🔑 Merchant access</h3>
+    <p class="muted">Paste the <code>MERCHANT_API_TOKEN</code> from the server
+    console. It stays in this tab's memory only.</p>
+    <div class="input-row">
+      <input id="token" type="password" placeholder="MERCHANT_API_TOKEN"
+             autocomplete="off">
+      <button id="connect">Connect</button>
+    </div>
+    <p id="gate-msg" class="muted"></p>
+  </section>
+
+  <section id="dash" hidden>
+    <div class="dash-grid">
+      <div class="card">
+        <h3>🤖 AI Daily Brief</h3>
+        <button id="btn-brief">Generate brief</button>
+        <pre id="brief" class="brief">Click “Generate brief” — PayPilot analyzes today's orders, top products and abandoned checkouts.</pre>
+      </div>
+      <div class="card wide">
+        <h3>🧾 Orders</h3>
+        <button id="btn-refresh">Refresh</button>
+        <table id="orders"><thead><tr><th>Order</th><th>Items</th><th>Total</th><th>Status</th><th></th></tr></thead><tbody></tbody></table>
+      </div>
+      <div class="card">
+        <h3>✉️ Cart-recovery draft</h3>
+        <p class="muted">Pick an abandoned (CREATED) order above → “Draft follow-up”, then copy & send via WhatsApp/IG DM.</p>
+        <pre id="followup" class="brief">No draft yet.</pre>
+      </div>
+    </div>
+  </section>
+</main>
+<footer>PayPilot · merchant area — keep your token private</footer>
+<script src="/static/merchant.js"></script>
+</body>
+</html>

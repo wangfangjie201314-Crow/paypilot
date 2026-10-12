@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }} — PayPilot</title>
+<link rel="stylesheet" href="/static/style.css"></head>
+<body class="msg-page">
+<div class="msg-card">
+  <div class="msg-icon">{{ "✅" if ok else "ℹ️" }}</div>
+  <h2>{{ title }}</h2>
+  <p>{{ body }}</p>
+  <p class="muted">You can close this tab — your PayPilot chat has the details.</p>
+</div>
+</body>
+</html>
